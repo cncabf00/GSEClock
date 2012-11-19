@@ -26,7 +26,6 @@ import ch.swingfx.twinkle.manager.SequentialNotificationManager;
 import ch.swingfx.twinkle.manager.WindowOpenListener;
 import ch.swingfx.twinkle.style.INotificationStyle;
 import ch.swingfx.twinkle.style.theme.DarkDefaultNotification;
-import ch.swingfx.twinkle.style.theme.GSEDefaultNotification;
 import ch.swingfx.twinkle.window.DefaultNotificationWindow;
 import ch.swingfx.twinkle.window.IPosition;
 
