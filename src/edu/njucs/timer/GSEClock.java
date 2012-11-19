@@ -26,6 +26,7 @@ import ch.swingfx.twinkle.manager.SequentialNotificationManager;
 import ch.swingfx.twinkle.manager.WindowOpenListener;
 import ch.swingfx.twinkle.style.INotificationStyle;
 import ch.swingfx.twinkle.style.theme.DarkDefaultNotification;
+import ch.swingfx.twinkle.style.theme.GSEDefaultNotification;
 import ch.swingfx.twinkle.window.DefaultNotificationWindow;
 import ch.swingfx.twinkle.window.IPosition;
 
@@ -34,6 +35,11 @@ public class GSEClock implements SwitchableTimerListener, WindowOpenListener, IN
 	public static final String SETTING_FILE="setting.ini";
 	public static final int STATER=0;
 	public static final int ATTACKER=1;
+	public static final int LEFT_UP=0;
+	public static final int RIGHT_UP=1;
+	public static final int LEFT_BOTTOM=2;
+	public static final int RIGHT_BOTTOM=3;
+	
 	int currentSpeaker;
 	DefaultNotificationWindow window;
 	SwitchableTimer timer;
@@ -47,13 +53,16 @@ public class GSEClock implements SwitchableTimerListener, WindowOpenListener, IN
 	GSEClockListener listener;
 	boolean end=false;
 	
+	int location=LEFT_UP;
 	
 	
 	public GSEClock()
 	{
+		readSettingFile();
+		GSEDefaultNotification style=new GSEDefaultNotification();
 		SequentialNotificationManager.setListener(this);
 		new NotificationBuilder()
-		.withStyle(new DarkDefaultNotification())
+		.withStyle(style)
 		.withTitle(getTitle())
 		.withMessage("Ë«»÷¿ªÊ¼")
 		.withDisplayTime(Integer.MAX_VALUE)
@@ -63,7 +72,25 @@ public class GSEClock implements SwitchableTimerListener, WindowOpenListener, IN
 			@Override
 			public Point getPosition(Dimension screenSize, Insets screenInsets,
 					JWindow window, INotificationStyle style) {
-				return new Point(screenSize.width-window.getWidth(), 0);
+				int x=0;
+				int y=0;
+				switch (location) {
+				case LEFT_UP:
+					break;
+				case RIGHT_UP:
+					x = screenSize.width - window.getWidth();
+					break;
+				case LEFT_BOTTOM:
+					y=screenSize.height-window.getHeight();
+					break;
+				case RIGHT_BOTTOM:
+					x = screenSize.width - window.getWidth();
+					y=screenSize.height-window.getHeight();
+					break;
+				default:
+					break;
+				}
+				return new Point(x, y);
 			}
 		})
 		.showNotification();
@@ -71,7 +98,6 @@ public class GSEClock implements SwitchableTimerListener, WindowOpenListener, IN
 		timer.setListener(this);
 		currentSpeaker=STATER;
 		restTimes=new int[2];
-		readSettingFile();
 	}
 	
 	public void start()
@@ -360,6 +386,65 @@ public class GSEClock implements SwitchableTimerListener, WindowOpenListener, IN
 				else if (left.equals("soundswitch"))
 				{
 					soundFiles[5]=strs[1].trim();
+				}
+				else if (left.equals("location"))
+				{
+					if (strs[1].trim().toLowerCase().equals("leftup"))
+					{
+						location=LEFT_UP;
+					}
+					else if (strs[1].trim().toLowerCase().equals("rightup"))
+					{
+						location=RIGHT_UP;
+					}
+					else if (strs[1].trim().toLowerCase().equals("leftbottom"))
+					{
+						location=LEFT_BOTTOM;
+					}
+					else if (strs[1].trim().toLowerCase().equals("leftbottom"))
+					{
+						location=RIGHT_BOTTOM;
+					}
+				}
+				else if (left.equals("titlefont"))
+				{
+					GSEDefaultNotification.titleFont=strs[1].trim();
+				}
+				else if (left.equals("titlefontsize"))
+				{
+					GSEDefaultNotification.titleFontSize=strs[1].trim();
+				}
+				else if (left.equals("titlefontcolor"))
+				{
+					GSEDefaultNotification.titleFontColor=strs[1].trim();
+				}
+				else if (left.equals("messagefont"))
+				{
+					GSEDefaultNotification.messageFont=strs[1].trim();
+				}
+				else if (left.equals("messagefontsize"))
+				{
+					GSEDefaultNotification.messageFontSize=strs[1].trim();
+				}
+				else if (left.equals("messagefontcolor"))
+				{
+					GSEDefaultNotification.messageFontColor=strs[1].trim();
+				}
+				else if (left.equals("backgroundcolor"))
+				{
+					GSEDefaultNotification.backgroundColor=strs[1].trim();
+				}
+				else if (left.equals("backgroundalpha"))
+				{
+					GSEDefaultNotification.backgroundAlpha=strs[1].trim();
+				}
+				else if (left.equals("width"))
+				{
+					GSEDefaultNotification.width=strs[1].trim();
+				}
+				else if (left.equals("cornerradius"))
+				{
+					GSEDefaultNotification.cornerRadius=strs[1].trim();
 				}
 				line=reader.readLine();
 			}
