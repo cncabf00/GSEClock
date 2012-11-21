@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.sound.sampled.AudioFormat;
@@ -282,7 +283,8 @@ public class GSEClock implements SwitchableTimerListener, WindowOpenListener, IN
 	private void readSettingFile()
 	{
 		try {
-			BufferedReader reader=new BufferedReader(new FileReader(new File(SETTING_FILE)));
+			String path = System.getProperty("java.class.path");
+			BufferedReader reader=new BufferedReader(new FileReader(new File(path.substring(0, path.lastIndexOf(File.separator))+File.separator+SETTING_FILE)));
 			String line=reader.readLine();
 			while (line!=null)
 			{
