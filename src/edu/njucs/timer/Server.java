@@ -42,6 +42,7 @@ public class Server {
 			try {
 				socket = serverSocket.accept();
 				messageSocket= serverMessageSocket.accept();
+				socket.setSoTimeout(1000);
 				//建立新线程
 	            HandleAClient handler = new HandleAClient(socket,messageSocket);
 	            clock.setListener(handler);
@@ -109,6 +110,11 @@ public class Server {
             	//不断监听用户信息
                 while (socket.isClosed() == false) {
                 	try {
+                		try{
+                		      socket.sendUrgentData(0xFF);
+                		}catch(Exception ex){
+                		      break;
+                		}
                         message=inputFromClient.readInt();
                         if (!started)
                         {
